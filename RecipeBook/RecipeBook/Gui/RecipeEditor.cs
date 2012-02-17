@@ -72,29 +72,29 @@ namespace RecipeBook.Gui
         {
             InitializeComponent();
 
-            Dictionary<string, Item> itemsByName;
             if (RecipeBooks.Current != null)
             {
-                itemsByName = RecipeBooks.Current.Items.ToDictionary(i => i.Name, i => i, Utils.CaseInsensitiveComparer);
+                this.itemNameComboBox.Items.AddRange(RecipeBooks.Current.Items.Select(i => i.Name).ToArray());
+                this.itemNameComboBox.AddAutoComplete(o => o.ToString());
             }
-            else
-            {
-                itemsByName = new Dictionary<string, Item>();
-            }
-            this.itemNameComboBox.Items.AddRange(itemsByName.Keys.ToArray());
-            this.itemNameComboBox.AddAutoComplete(o => o.ToString());
+                
             this.itemNameComboBox.SelectedIndexChanged += (o, e) =>
             {
                 if (this.itemNameComboBox.SelectedIndex >= 0)
                 {
-                    var item = itemsByName[this.itemNameComboBox.SelectedItem.ToString()];
+                    var item = RecipeBooks.Current.Items.FirstOrDefault(i => string.Compare(i.Name, this.itemNameComboBox.Text) == 0);
+                    if (item == null)
+                    {
+                        return;
+                    }
+
                     if (this.unitsDropDown.Items.Count == 0 ||
-                        ((Unit)this.unitsDropDown.Items[0]).Info().UnitType != item.UnitType)
+                        (UnitUtils.ParseUnit(this.unitsDropDown.Items[0].ToString())).Info().UnitType != item.UnitType)
                     {
                         this.unitsDropDown.Items.Clear();
-                        var units = item.UnitType.Units().Cast<object>().ToArray();
-                        this.unitsDropDown.Items.AddRange(units);
-                        this.unitsDropDown.SelectedIndex = units.IndexWhere(u => u.Equals(item.DefaultRecipeUnit));
+                        var units = item.UnitType.Units().Select(u => new { unit = u, u.GuiInfo().DisplayText }).ToArray();
+                        this.unitsDropDown.Items.AddRange(units.Select(t => t.DisplayText).ToArray());
+                        this.unitsDropDown.SelectedIndex = units.IndexWhere(t => t.unit == item.DefaultRecipeUnit);
                     }
                 }
             };
@@ -104,17 +104,19 @@ namespace RecipeBook.Gui
 
             this.addButton.Click += (o, e) =>
             {
-                if (!itemsByName.ContainsKey(this.itemNameComboBox.Text))
+                var itemName = itemNameComboBox.Text;
+                var item = RecipeBooks.Current.Items.FirstOrDefault(i => string.Compare(i.Name, itemName, ignoreCase: true) == 0);
+                if (item == null)
                 {
-                    Utils.Alert(string.IsNullOrWhiteSpace(this.itemNameComboBox.Text) 
+                    Utils.Alert(string.IsNullOrWhiteSpace(itemName) 
                         ? "No item selected!"
-                        : string.Format("There is no item named '{0}'!", this.itemNameComboBox.Text));
+                        : string.Format("There is no item named '{0}'!", itemName));
                     this.itemNameComboBox.SelectAndFocus();
                     return;
                 }
                 else if (this.ingredientsGrid.Rows
                     .Cast<DataGridViewRow>()
-                    .FirstOrDefault(r => Utils.CaseInsensitiveComparer.Equals(this.itemNameComboBox.Text, r.Cells[this.itemColumn.Index].Value.ToString())) != null)
+                    .Any(r => string.Compare(itemName, r.Cells[this.itemColumn.Index].Value.ToString(), ignoreCase: true) == 0))
                 {
                     Utils.Alert(string.Format("{0} is already in the recipe!", this.itemNameComboBox.Text));
                     this.itemNameComboBox.SelectAndFocus();
@@ -136,7 +138,7 @@ namespace RecipeBook.Gui
                     return;
                 }
 
-                this.AddIngredient(RecipeBooks.Current.Items.First(i => i.Name == this.itemNameComboBox.Text), quantity, (Unit)this.unitsDropDown.SelectedItem);
+                this.AddIngredient(item, quantity, UnitUtils.ParseUnit(this.unitsDropDown.SelectedItem.ToString()));
                 this.itemNameComboBox.SelectAndFocus();
             };
 
@@ -157,7 +159,6 @@ namespace RecipeBook.Gui
                 Item newItem = Dialogs.Edit<ItemEditor, Item>(allowOverwrite: false);
                 if (newItem != null)
                 {
-                    itemsByName[newItem.Name] = newItem;
                     this.itemNameComboBox.Items.Add(newItem.Name);
                     this.itemNameComboBox.SelectedIndex = this.itemNameComboBox.Items.Count - 1;
                     this.quantityComboBox.SelectedIndex = this.quantityComboBox.Items
@@ -281,8 +282,8 @@ namespace RecipeBook.Gui
             row.Cells.Add(new DataGridViewTextBoxCell { Value = quantity });
 
             var unitCell = new DataGridViewComboBoxCell { DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing };
-            unitCell.Items.AddRange(item.UnitType.Units().Select(u => u.ToString()).ToArray());
-            unitCell.Value = unitCell.Items.Cast<string>().First(s => s == units.ToString());
+            unitCell.Items.AddRange(item.UnitType.Units().Select(u => u.GuiInfo().DisplayText).ToArray());
+            unitCell.Value = unitCell.Items.Cast<string>().First(s => UnitUtils.ParseUnit(s) == units);
             row.Cells.Add(unitCell);
 
             row.Cells.Add(new DataGridViewButtonCell { Value = "Remove" });
