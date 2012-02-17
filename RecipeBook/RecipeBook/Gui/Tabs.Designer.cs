@@ -39,7 +39,9 @@
             this.recipeQuantityColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.addRecipeToListColumn = new System.Windows.Forms.DataGridViewButtonColumn();
             this.recipeIdColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.recipeEditor = new RecipeBook.Gui.RecipeEditor();
             this.itemsTab = new System.Windows.Forms.TabPage();
+            this.itemEditor = new RecipeBook.Gui.ItemEditor();
             this.createNewItemButton = new System.Windows.Forms.Button();
             this.itemSearchTextBox = new System.Windows.Forms.TextBox();
             this.itemSearchLabel = new System.Windows.Forms.Label();
@@ -51,13 +53,11 @@
             this.addItemToListColumn = new System.Windows.Forms.DataGridViewButtonColumn();
             this.itemIdColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.listTab = new System.Windows.Forms.TabPage();
+            this.clearListButton = new System.Windows.Forms.Button();
             this.useTwoColumnsBox = new System.Windows.Forms.CheckBox();
             this.shoppingListTextBox = new System.Windows.Forms.TextBox();
             this.exportListButton = new System.Windows.Forms.Button();
             this.refreshListButton = new System.Windows.Forms.Button();
-            this.clearListButton = new System.Windows.Forms.Button();
-            this.recipeEditor = new RecipeBook.Gui.RecipeEditor();
-            this.itemEditor = new RecipeBook.Gui.ItemEditor();
             this.tabControl.SuspendLayout();
             this.recipesTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.recipeGrid)).BeginInit();
@@ -167,6 +167,16 @@
             this.recipeIdColumn.ReadOnly = true;
             this.recipeIdColumn.Visible = false;
             // 
+            // recipeEditor
+            // 
+            this.recipeEditor.CheckBoxMode = false;
+            this.recipeEditor.Location = new System.Drawing.Point(473, 7);
+            this.recipeEditor.Name = "recipeEditor";
+            this.recipeEditor.ReadOnly = true;
+            this.recipeEditor.ShowSaveAsEditWhenReadOnly = true;
+            this.recipeEditor.Size = new System.Drawing.Size(814, 509);
+            this.recipeEditor.TabIndex = 0;
+            // 
             // itemsTab
             // 
             this.itemsTab.Controls.Add(this.itemEditor);
@@ -181,6 +191,15 @@
             this.itemsTab.TabIndex = 1;
             this.itemsTab.Text = "Items";
             this.itemsTab.UseVisualStyleBackColor = true;
+            // 
+            // itemEditor
+            // 
+            this.itemEditor.Location = new System.Drawing.Point(778, 133);
+            this.itemEditor.Name = "itemEditor";
+            this.itemEditor.ReadOnly = true;
+            this.itemEditor.ShowSaveAsEditWhenReadOnly = true;
+            this.itemEditor.Size = new System.Drawing.Size(301, 218);
+            this.itemEditor.TabIndex = 9;
             // 
             // createNewItemButton
             // 
@@ -277,6 +296,15 @@
             this.listTab.Text = "Shopping List";
             this.listTab.UseVisualStyleBackColor = true;
             // 
+            // clearListButton
+            // 
+            this.clearListButton.Location = new System.Drawing.Point(6, 493);
+            this.clearListButton.Name = "clearListButton";
+            this.clearListButton.Size = new System.Drawing.Size(154, 23);
+            this.clearListButton.TabIndex = 4;
+            this.clearListButton.Text = "Clear List";
+            this.clearListButton.UseVisualStyleBackColor = true;
+            // 
             // useTwoColumnsBox
             // 
             this.useTwoColumnsBox.AutoSize = true;
@@ -291,17 +319,18 @@
             // 
             // shoppingListTextBox
             // 
-            this.shoppingListTextBox.Location = new System.Drawing.Point(157, 6);
+            this.shoppingListTextBox.Location = new System.Drawing.Point(166, 6);
             this.shoppingListTextBox.Multiline = true;
             this.shoppingListTextBox.Name = "shoppingListTextBox";
-            this.shoppingListTextBox.Size = new System.Drawing.Size(1130, 510);
+            this.shoppingListTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.shoppingListTextBox.Size = new System.Drawing.Size(1121, 510);
             this.shoppingListTextBox.TabIndex = 2;
             // 
             // exportListButton
             // 
             this.exportListButton.Location = new System.Drawing.Point(6, 35);
             this.exportListButton.Name = "exportListButton";
-            this.exportListButton.Size = new System.Drawing.Size(144, 23);
+            this.exportListButton.Size = new System.Drawing.Size(154, 23);
             this.exportListButton.TabIndex = 1;
             this.exportListButton.Text = "Open List in Text Editor";
             this.exportListButton.UseVisualStyleBackColor = true;
@@ -310,38 +339,10 @@
             // 
             this.refreshListButton.Location = new System.Drawing.Point(6, 6);
             this.refreshListButton.Name = "refreshListButton";
-            this.refreshListButton.Size = new System.Drawing.Size(144, 23);
+            this.refreshListButton.Size = new System.Drawing.Size(154, 23);
             this.refreshListButton.TabIndex = 0;
             this.refreshListButton.Text = "Refresh List";
             this.refreshListButton.UseVisualStyleBackColor = true;
-            // 
-            // clearListButton
-            // 
-            this.clearListButton.Location = new System.Drawing.Point(6, 493);
-            this.clearListButton.Name = "clearListButton";
-            this.clearListButton.Size = new System.Drawing.Size(144, 23);
-            this.clearListButton.TabIndex = 4;
-            this.clearListButton.Text = "Clear List";
-            this.clearListButton.UseVisualStyleBackColor = true;
-            // 
-            // recipeEditor
-            // 
-            this.recipeEditor.CheckBoxMode = false;
-            this.recipeEditor.Location = new System.Drawing.Point(473, 7);
-            this.recipeEditor.Name = "recipeEditor";
-            this.recipeEditor.ReadOnly = true;
-            this.recipeEditor.ShowSaveAsEditWhenReadOnly = true;
-            this.recipeEditor.Size = new System.Drawing.Size(814, 509);
-            this.recipeEditor.TabIndex = 0;
-            // 
-            // itemEditor
-            // 
-            this.itemEditor.Location = new System.Drawing.Point(778, 133);
-            this.itemEditor.Name = "itemEditor";
-            this.itemEditor.ReadOnly = true;
-            this.itemEditor.ShowSaveAsEditWhenReadOnly = true;
-            this.itemEditor.Size = new System.Drawing.Size(301, 218);
-            this.itemEditor.TabIndex = 9;
             // 
             // Tabs
             // 
