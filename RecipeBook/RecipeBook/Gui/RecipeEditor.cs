@@ -74,7 +74,10 @@ namespace RecipeBook.Gui
 
             if (RecipeBooks.Current != null)
             {
-                this.itemNameComboBox.Items.AddRange(RecipeBooks.Current.Items.Select(i => i.Name).ToArray());
+                this.itemNameComboBox.Items.AddRange(RecipeBooks.Current.Items
+                    .Select(i => i.Name)
+                    .OrderBy(n => n)
+                    .ToArray());
                 this.itemNameComboBox.AddAutoComplete(o => o.ToString());
             }
                 

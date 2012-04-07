@@ -153,7 +153,10 @@ namespace RecipeBook.Gui
                 if (RecipeBooks.Current != null)
                 {
                     this.recipeGrid.Rows.Clear();
-                    this.recipeGrid.Rows.AddRange(RecipeBooks.Current.Recipes.Select(this.CreateRow).ToArray());
+                    this.recipeGrid.Rows.AddRange(RecipeBooks.Current.Recipes
+                        .OrderBy(r => r.Name)
+                        .Select(this.CreateRow)
+                        .ToArray());
                     if (this.recipeGrid.Rows.Count > 0)
                     {
                         displayRecipe(this.recipeGrid, new DataGridViewCellEventArgs(0, 0));
@@ -294,7 +297,10 @@ namespace RecipeBook.Gui
                 if (e.TabPage == this.itemsTab && RecipeBooks.Current != null)
                 {
                     this.itemGrid.Rows.Clear();
-                    this.itemGrid.Rows.AddRange(RecipeBooks.Current.Items.Select(this.CreateRow).ToArray());
+                    this.itemGrid.Rows.AddRange(RecipeBooks.Current.Items
+                        .OrderBy(i => i.Name)
+                        .Select(this.CreateRow)
+                        .ToArray());
                     if (this.itemGrid.Rows.Count > 0)
                     {
                         displayItem(this.itemGrid, new DataGridViewCellEventArgs(0, 0));
